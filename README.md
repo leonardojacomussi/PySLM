@@ -11,8 +11,7 @@ To begin, one can try:
 
 ## Installation
 
-    >>> pip install git+https://github.com/pyttamaster/pytta@development
-
+    >>> pip install git+https://github.com/leonardojacomussi/PySLM@main
 
 ## Dependencies
 - Numpy;

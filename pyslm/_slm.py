@@ -385,9 +385,9 @@ class setSLM(QtWidgets.QMainWindow, pyslm.guiSLM):
         if self.parameters['saveRawData'] == False:
             os.remove(self.manager.recorderRawData.fname)
         if self.manager.template == 'reverberationTime':
-            print('Implementar saver do Excel!')
+            print('Implement save function in Excel.')
         else:
-            print('Implementar saver do Excel!')
+            print('Implement save function in Excel.')
         self._setStringsGUI()
         self.set_standby()
         return

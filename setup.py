@@ -14,15 +14,15 @@ import os
 path_setup = os.path.join(os.path.dirname(os.path.realpath('__file__')), 'pyslm')
 path_icon = os.path.join(path_setup, 'Icons')
 
-# with open("README.md", "r") as f:
-#     long_description = f.read()
+with open("README.md", "r") as f:
+    long_description = f.read()
 
 settings = {
     'name': 'PySLM',
     'version': '1.2',
     'description': "Pythonic Sound Level Meter.",
-    # 'long_description': long_description,
-    # 'long_description_content_type': 'text/markdown',
+    'long_description': long_description,
+    'long_description_content_type': 'text/markdown',
     'url': 'https://github.com/leonardojacomussi/PySLM',
     'author': 'Leonardo Jacomussi',
     'author_email': 'leonardo.jacomussi@eac.ufsm.br',

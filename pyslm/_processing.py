@@ -86,11 +86,11 @@ class parallelprocess(mp.Process):
                 continue
             while self.isPlayed.is_set():
                 if not self.inData.empty():
-                    self._inData = self.inData.get_nowait()
+                    rawData = self.inData.get_nowait()
                     # Applying calibration factor
-                    self._inData = self._inData * self.params['calibFactor']
+                    rawData = rawData * self.params['calibFactor']
                     # Getting global and band levels
-                    signal = self._inData[:, 0]
+                    signal = rawData[:, 0]
                     # 1) Apply spectral correction if correction files exist
                     if self.corr:
                         signal = self._apply_correction(signal=signal, domain='time')
@@ -163,11 +163,11 @@ class parallelprocess(mp.Process):
                 continue
             while self.isPlayed.is_set():
                 if not self.inData.empty():
-                    self._inData, _ = self.inData.get_nowait()
+                    rawData, _ = self.inData.get_nowait()
                     # Applying calibration factor
-                    self._inData = self._inData * self.params['calibFactor']
+                    rawData = rawData * self.params['calibFactor']
                     # Getting global and band levels
-                    signal = self._inData[:, 0]
+                    signal = rawData[:, 0]
                     # 1) Apply spectral correction if correction files exist
                     if self.corr:
                         signal = self._apply_correction(signal=signal, domain='time')
@@ -211,7 +211,7 @@ class parallelprocess(mp.Process):
                                              'Lpeak': self.Lpeak,
                                              'Lglobal': self.Lglobal,
                                              'SEL': SEL,
-                                             'signal': self._inData,
+                                             'signal': rawData,
                                              'strBands': self.strBands,
                                              'x_axis': self.x_axis,
                                              'bands': self.bands})
@@ -260,11 +260,11 @@ class parallelprocess(mp.Process):
                 continue
             while self.isPlayed.is_set():
                 if not self.inData.empty():
-                    self._inData, framesRead, countDecay = self.inData.get_nowait()
+                    rawData, framesRead, countDecay = self.inData.get_nowait()
                     # Applying calibration factor
-                    self._inData = self._inData * self.params['calibFactor']
+                    rawData = rawData * self.params['calibFactor']
                     # Getting global and band levels
-                    signal = self._inData[:, 0]
+                    signal = rawData[:, 0]
                     # 1) Apply spectral correction if correction files exist
                     if self.corr:
                         signal = self._apply_correction(signal=signal, domain='time')
@@ -287,7 +287,7 @@ class parallelprocess(mp.Process):
                                              'Lp_bands': Lp_bands,
                                              'strBands': self.strBands,
                                              'x_axis': self.x_axis,
-                                             'signal': self._inData,
+                                             'signal': rawData,
                                              'framesRead': framesRead,
                                              'countDecay': countDecay,
                                              'bands': self.bands})
@@ -326,7 +326,7 @@ class parallelprocess(mp.Process):
                 continue
             while self.isPlayed.is_set():
                 if not self.inData.empty():
-                    self._inDataframesRead, framesRead = self.inData.get_nowait()
+                    self._inData, framesRead = self.inData.get_nowait()
                     # Getting global and band levels
                     signal = self._inData[:, 0]
                     # 1) Apply spectral correction if correction files exist

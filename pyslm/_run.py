@@ -9,3 +9,6 @@ def run():
     sys.exit(application.exec_())
     print('***************** PySLM has ended! ****************')
     return
+
+if __name__ == "__main__":
+    run()

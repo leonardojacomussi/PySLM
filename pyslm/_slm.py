@@ -133,7 +133,6 @@ class setSLM(QtWidgets.QMainWindow, pyslm.guiSLM):
                                 corrADC=self.parameters['adcCorr'],
                                 applyAdcCorr=self.parameters['applyAdcCorr'],
                                 saveRawData=self.parameters['saveRawData'])
-        print(self.parameters['saveRawData'])
         self.manager.play()
         self.manager.realtime_data.connect(self.update_frequencyAnalyzer)
         self.manager.fullresults_data.connect(self.full_frequencyAnalyzer)

@@ -506,7 +506,7 @@ class StreamManager(QtCore.QObject):
                                           weightingfilter=self.parallelProcess.weightingfilter)
                 self.fullresults_data.emit(process.results)
                 self.RT20 = process.results['RT20']
-                print(self.RT20)
+                # print(self.RT20)
             elif self.template == 'calibration':
                 self.send_to_disk = self.send_to_disk[self.cutSamples:self.framesRead,0]
                 process = pyslm.finalprocessing(inData=self.send_to_disk, params=self.params,

@@ -95,13 +95,13 @@ class StreamManager(QtCore.QObject):
                 self.callstop.emit()
             else:
                 pass
-            self.isPlayed.clear()
-            self.isPaused.clear()
-            self.isStopped.set()
             if self.stream.active:
                 self.stream.close()
             else:
                 pass
+            self.isPlayed.clear()
+            self.isPaused.clear()
+            self.isStopped.set()
             # Waiting for termination of unfinished
             # processes and threads
             while(self.gettingResults.is_alive() and\

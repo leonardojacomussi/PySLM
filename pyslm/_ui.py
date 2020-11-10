@@ -15,8 +15,8 @@ class guiSLM(object):
     def setupUi(self, gui_SLM):
         gui_SLM.setObjectName("gui_SLM")
         # gui_SLM.resize(800, 430)
-        gui_SLM.resize(750, 410)
-        gui_SLM.setFixedSize(750, 410)
+        # gui_SLM.resize(750, 410)
+        gui_SLM.setFixedSize(800, 430)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(os.path.join(path_icons, "SLM.ico")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         gui_SLM.setWindowIcon(icon)
@@ -488,8 +488,8 @@ class guiSetup(object):
     def setupUi(self, gui_Setup):
         gui_Setup.setObjectName("gui_Setup")
         # gui_Setup.resize(800, 430)
-        gui_Setup.resize(750, 410)
-        gui_Setup.setFixedSize(750, 410)
+        # gui_Setup.resize(750, 410)
+        gui_Setup.setFixedSize(800, 430)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(os.path.join(path_icons, "Setup_noclick.ico")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         gui_Setup.setWindowIcon(icon)

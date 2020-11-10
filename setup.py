@@ -27,8 +27,8 @@ settings = {
     'author': 'Leonardo Jacomussi',
     'author_email': 'leonardo.jacomussi@eac.ufsm.br',
     'license': 'MIT',
-    'install_requires': ['numpy==1.19.1', 'scipy==1.5.0', 'matplotlib==3.3.1',
-                         'sounddevice==0.4.0', 'h5py==2.10.0', 'pyqtgraph==0.11.0'],
+    'install_requires': ['numpy>=1.19.1', 'scipy>=1.5.0', 'matplotlib>=3.3.1',
+                         'sounddevice>=0.4.0', 'h5py>=2.10.0', 'pyqtgraph>=0.11.0'],
     'packages': ['pyslm'],
     'package_dir': {'PySLM': 'pyslm'},
     'classifiers': [

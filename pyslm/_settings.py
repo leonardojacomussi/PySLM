@@ -1,4 +1,4 @@
-from PySide2 import QtCore, QtGui, QtWidgets
+from pyqtgraph.Qt import QtCore, QtGui, QtWidgets
 import sounddevice as sd
 import threading as thd
 from time import sleep

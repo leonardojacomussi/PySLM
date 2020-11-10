@@ -1,4 +1,4 @@
-from PySide2 import QtWidgets
+from pyqtgraph.Qt import QtWidgets
 import pyslm
 import sys
 

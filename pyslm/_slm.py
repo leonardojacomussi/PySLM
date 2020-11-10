@@ -1,5 +1,5 @@
 
-from PySide2 import QtCore, QtGui, QtWidgets
+from pyqtgraph.Qt import QtCore, QtGui, QtWidgets
 from datetime import datetime, date
 import pyqtgraph, sys, os
 import threading as thd
@@ -91,7 +91,7 @@ class setSLM(QtWidgets.QMainWindow, pyslm.guiSLM):
         self.ax = self.measurementViewer.getAxis('bottom')
         return
 
-    @QtCore.Slot(dict)
+    @QtCore.pyqtSlot(dict)
     def update_standby(self, results):
         Lp_global = results['Lp_global']
         Lp_bands = results['Lp_bands']
@@ -140,7 +140,7 @@ class setSLM(QtWidgets.QMainWindow, pyslm.guiSLM):
         self.ax = self.measurementViewer.getAxis('bottom')
         return
 
-    @QtCore.Slot()
+    @QtCore.pyqtSlot()
     def callOverlay(self):
         self.overlay = pyslm.Overlay(self.centralWidget())
         self.overlay.hide()
@@ -149,7 +149,7 @@ class setSLM(QtWidgets.QMainWindow, pyslm.guiSLM):
         self.overlay.show()
         return
 
-    @QtCore.Slot(dict)
+    @QtCore.pyqtSlot(dict)
     def update_frequencyAnalyzer(self, results):
         Lp_global = results['Lp_global']
         Lp_bands = results['Lp_bands']
@@ -163,7 +163,7 @@ class setSLM(QtWidgets.QMainWindow, pyslm.guiSLM):
             self.plotBar.setOpts(x=x_axis, height=Lp_bands, width=0.6,brush=(120, 145, 255))
         return
 
-    @QtCore.Slot(dict)
+    @QtCore.pyqtSlot(dict)
     def full_frequencyAnalyzer(self, results):
         if self.parameters['tau'] == 0.035:
             tweighting = 'I'
@@ -253,7 +253,7 @@ class setSLM(QtWidgets.QMainWindow, pyslm.guiSLM):
         self.ax = self.measurementViewer.getAxis('bottom')
         return
 
-    @QtCore.Slot(dict)
+    @QtCore.pyqtSlot(dict)
     def update_reverberationTime(self, results):
         Lp_global = results['Lp_global']
         Lp_bands = results['Lp_bands']
@@ -268,7 +268,7 @@ class setSLM(QtWidgets.QMainWindow, pyslm.guiSLM):
             self.plotBar.setOpts(x=x_axis, height=Lp_bands, width=0.6,brush=(120, 145, 255))
         return
 
-    @QtCore.Slot(dict)
+    @QtCore.pyqtSlot(dict)
     def full_reverberationTime(self, results):
         _translate = QtCore.QCoreApplication.translate
         id500 = np.where(results['freq'] == 500)[0][0]

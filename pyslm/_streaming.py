@@ -7,7 +7,7 @@ Created on Fri Jul 24 16:52:22 2020
 from scipy import interpolate as interp
 import multiprocessing as mp
 from time import sleep, time
-from PySide2 import QtCore
+from pyqtgraph.Qt import QtCore
 import sounddevice as sd
 import threading as thd
 import numpy as np
@@ -16,9 +16,9 @@ import os
 import pyslm
 
 class StreamManager(QtCore.QObject):
-    realtime_data = QtCore.Signal(dict)
-    fullresults_data = QtCore.Signal(dict)
-    callstop = QtCore.Signal()
+    realtime_data = QtCore.pyqtSignal(dict)
+    fullresults_data = QtCore.pyqtSignal(dict)
+    callstop = QtCore.pyqtSignal()
     def __init__(self, path: str, device: list, fs: int, inCh: list, outCh: list,
                  tau: float, fstart: float, fend: float, b: int, fweighting: str,
                  duration: int, excitTime: int, scapeTime: int, decayTime: int, TLevel: int,

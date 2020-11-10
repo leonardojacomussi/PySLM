@@ -18,6 +18,5 @@ To begin, one can try:
 - Scipy;
 - Matplotlib;
 - Sounddevice;
-- PySide2;
-- H5py;
-- pyqtgraph.
+- pyqtgraph;
+- H5py.

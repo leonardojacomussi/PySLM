@@ -1,4 +1,4 @@
-from PySide2 import QtCore, QtGui, QtWidgets
+from pyqtgraph.Qt import QtCore, QtGui, QtWidgets
 import pyqtgraph, sys, os, math
 import pyslm
 

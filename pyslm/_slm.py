@@ -382,12 +382,13 @@ class setSLM(QtWidgets.QMainWindow, pyslm.guiSLM):
 
     def btnSave_Action(self):
         self.btnSave.setIcon(QtGui.QIcon(os.path.join(path_icons, "Save_click.ico")))
-        if self.parameters['saveRawData'] == False:
-            os.remove(self.manager.recorderRawData.fname)
-        if self.manager.template == 'reverberationTime':
-            print('Implement save function in Excel.')
+        if self.parameters['saveRawData']:
+            if self.manager.template == 'reverberationTime':
+                print('Implement save function in Excel.')
+            else:
+                print('Implement save function in Excel.')
         else:
-            print('Implement save function in Excel.')
+            pass
         self._setStringsGUI()
         self.set_standby()
         return
@@ -396,6 +397,11 @@ class setSLM(QtWidgets.QMainWindow, pyslm.guiSLM):
         self.btnDelete.setIcon(QtGui.QIcon(os.path.join(path_icons, "Delete_click.ico")))
         if self.parameters['saveRawData']:
             os.remove(self.manager.recorderRawData.fname)
+        else:
+            if self.manager.template == 'reverberationTime':
+                print('Implement save function in Excel.')
+            else:
+                print('Implement save function in Excel.')
         self._setStringsGUI()
         self.set_standby()
         return

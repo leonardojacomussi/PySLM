@@ -7,7 +7,7 @@ Created on Fri Jul 24 16:52:22 2020
 from scipy import interpolate as interp
 import multiprocessing as mp
 from time import sleep, time
-from pyqtgraph.Qt import QtCore
+from PyQt5 import QtCore
 import sounddevice as sd
 import threading as thd
 import numpy as np

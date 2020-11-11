@@ -1,4 +1,4 @@
-from pyqtgraph.Qt import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets
 import sounddevice as sd
 import threading as thd
 from time import sleep
@@ -582,7 +582,7 @@ class setSetup(QtWidgets.QDialog, pyslm.guiSetup):
         self.stream_calibration.fullresults_data.connect(self.fullCalibrate)
         return
 
-    @QtCore.Slot(dict)
+    @QtCore.pyqtSlot(dict)
     def updateCalibrate(self, results):
         SPL = results['SPL'][1:]
         with np.errstate(divide='ignore'):
@@ -599,7 +599,7 @@ class setSetup(QtWidgets.QDialog, pyslm.guiSetup):
             pass
         return
 
-    @QtCore.Slot(dict)
+    @QtCore.pyqtSlot(dict)
     def fullCalibrate(self, results):
         self.groupBox_Calibration.setTitle('Performing calibration, please wait 00s')
         SPL = results['SPL']

@@ -1,5 +1,5 @@
 
-from pyqtgraph.Qt import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets
 from datetime import datetime, date
 import pyqtgraph, sys, os
 import threading as thd

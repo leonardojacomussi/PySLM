@@ -32,7 +32,7 @@ params = {#Measurement
           'corrFactor': 1.0,
           'sensitivity': 1.0,
           #Projects
-          'saveRawData': False,
+          'saveRawData': True,
           'currentProject': 'First project',
           'pathProject': pathDefault,
           #Spectrum correction

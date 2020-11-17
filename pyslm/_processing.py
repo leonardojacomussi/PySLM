@@ -407,7 +407,7 @@ class parallelprocess(mp.Process):
             with np.errstate(divide='ignore'):
                 freqSignal = np.fft.rfft(signal, axis=0, norm=None)
                 MagfreqSignal = 20 * \
-                    np.log10(np.abs(freqSignal)/self.refPressure)
+                    np.log10(np.abs(freqSignal))
                 correctedMagfreqSignal = MagfreqSignal
                 # Carregando dados do microfone
                 if self.params['corrMic'] is not None and self.params['applyMicCorr']:
@@ -420,7 +420,7 @@ class parallelprocess(mp.Process):
                     correctedMagfreqSignal -= self.params['corrADC']
                 # Retorna ao vetor de amplitude complexa com magnitude e fase
                 correctedfreqSignal = 10**(correctedMagfreqSignal /
-                                        20) * self.refPressure
+                                        20)
                 r = correctedfreqSignal
                 teta = np.angle(freqSignal)
                 correctedfreqSignal = r*(np.cos(teta) + np.sin(teta)*1j)
@@ -680,10 +680,3 @@ def apply_correction(signal: np.ndarray, fs: int, corrMic: {None, np.ndarray},
     except Exception as E:
         print("apply_correction(): ", E, "\n")
     return correctedSignal
-
-# #%% TESTE
-# import numpy as np
-
-# Leq = np.array([15,14,18,-2,6,-78,31,21,98,-54,-2,-36,5,2,46,-72,3,-2,7,9,34])
-# print(np.sort(Leq))
-# print(np.percentile(Leq, 90))

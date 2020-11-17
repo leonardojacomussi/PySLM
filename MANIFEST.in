@@ -1,3 +1,2 @@
 include pyslm/Files/*.txt
-include pyslm/Files/*.py
 include pyslm/Icons/*.ico

@@ -38,7 +38,7 @@ To install dependencies on an embedded system like the Raspberry Pi 4B or Asus T
   - [ResearchGate][ResearchGate_Leo]
 
 # See more
-[Dependencies to be installed in embedded systems.][sound-level-meter]
+[Dependencies to be installed in embedded systems][sound-level-meter]
 
 [*Raspberry Pi: A Low-cost Embedded System for Sound Pressure Level Measurement*][ArtigoInternoise]
 

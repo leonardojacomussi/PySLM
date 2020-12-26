@@ -19,7 +19,7 @@ with open("README.md", "r") as f:
 
 settings = {
     'name': 'PySLM',
-    'version': '1.2',
+    'version': '0.2',
     'description': "Pythonic Sound Level Meter.",
     'long_description': long_description,
     'long_description_content_type': 'text/markdown',
@@ -28,7 +28,7 @@ settings = {
     'author_email': 'leonardo.jacomussi@eac.ufsm.br',
     'license': 'MIT',
     'install_requires': ['numpy>=1.19.1', 'scipy>=1.5.0', 'matplotlib>=3.3.1', 'PyQt5',
-                         'sounddevice>=0.4.0', 'h5py>=2.10.0', 'pyqtgraph>=0.11.0'],
+                         'sounddevice>=0.4.0', 'h5py>=2.10.0', 'pyqtgraph>=0.11.0', 'XlsxWriter>=1.3.7'],
     'packages': ['pyslm'],
     'package_dir': {'PySLM': 'pyslm'},
     'classifiers': [

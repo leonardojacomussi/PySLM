@@ -1,31 +1,40 @@
-from ._processing import parallelprocess, ImpulseResponse, finalprocessing
-from . import _parameters as parameters
-from ._streaming import StreamManager
-from ._ui import guiSetup, guiSLM, Overlay
-from ._octfilter import OctFilter
-from ._signals import noise, sweep
-from ._weighting import weighting
-from ._settings import setSetup
-from ._storage import storage
-from ._rooms import rooms
-from ._slm import setSLM
-from ._run import run
-__version__ = '1.2'  # package version
+from .ui import guiSLM, guiSLM2, guiSetup, guiSetup2, guiKeyboard, Overlay
+from .processing import parallelprocess, finalprocessing, ImpulseResponse
+from .settings import setSetup, setSetup2
+from .slm import setSLM, setSLM2
+from . import parameters_ as parameters
+from .streaming import StreamManager
+from .storage import storage
+from .octfilter import OctFilter
+from .signals import noise, sweep
+from .weighting import weighting
+from .rooms import rooms
+from .export import save
+from .run import AdvFreqAnalyzer, DataLogger
 
-__all__ = ['parallelprocess',
-           'ImpulseResponse',
-           'finalprocessing',
-           'StreamManager',
-           'parameters',
-           'guiSetup',
-           'Overlay',
-           'guiSLM',
+__version__ = '0.2'  # package version
+
+__all__ = ['parameters',
            'OctFilter',
            'noise',
            'sweep',
            'weighting',
-           'setSetup',
-           'storage',
            'rooms',
+           'AdvFreqAnalyzer',
+           'DataLogger',
            'setSLM',
-           'run']
+           'setSLM2',
+           'guiSLM',
+           'guiSLM2',
+           'guiSetup',
+           'guiSetup2',
+           'guiKeyboard',
+           'Overlay',
+           'parallelprocess',
+           'finalprocessing',
+           'ImpulseResponse',
+           'setSetup',
+           'setSetup2',
+           'StreamManager',
+           'storage',
+           'save']

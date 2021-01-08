@@ -28,6 +28,7 @@ To install dependencies on an embedded system like the Raspberry Pi 4B or Asus T
 - Scipy;
 - Matplotlib;
 - Sounddevice;
+- SoundFile;
 - pyqtgraph;
 - PyQt5;
 - H5py.

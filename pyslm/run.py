@@ -19,5 +19,5 @@ def DataLogger():
     return start
 
 if __name__ == "__main__":
-    DataLogger()
-    # AdvFreqAnalyzer()
+    # DataLogger()
+    AdvFreqAnalyzer()

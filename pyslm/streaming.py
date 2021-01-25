@@ -146,8 +146,11 @@ class StreamManager(QtCore.QObject):
                 pass
             # Process of parallel processing
             try:
+                # self.parallelProcess.join()
+                # self.parallelProcess.close()
                 self.parallelProcess.join()
-                self.parallelProcess.close()
+                self.parallelProcess._stop()
+                self.parallelProcess._delete()
             except Exception:
                 pass
             # Shutting down database

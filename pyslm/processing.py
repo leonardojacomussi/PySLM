@@ -4,10 +4,12 @@ import threading as thd
 import numpy as np
 import pyslm
 
-class parallelprocess(mp.Process):
+# class parallelprocess(mp.Process):
+class parallelprocess(thd.Thread):
     def __init__(self, inData, isPlayed, params):
         # Inheriting the class multiprocessing.Process()
-        mp.Process.__init__(self)
+        # mp.Process.__init__(self)
+        thd.Thread.__init__(self)
         # Other initializations for event flags
         self.params = params
         self.inData = inData

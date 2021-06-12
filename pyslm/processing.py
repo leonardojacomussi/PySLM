@@ -1,15 +1,14 @@
 from scipy import interpolate as interp
+from typing import Union, Callable
 import multiprocessing as mp
-import threading as thd
 import numpy as np
 import pyslm
 
-# class parallelprocess(mp.Process):
-class parallelprocess(thd.Thread):
+
+class parallelprocess(mp.Process):
     def __init__(self, inData, isPlayed, params):
         # Inheriting the class multiprocessing.Process()
-        # mp.Process.__init__(self)
-        thd.Thread.__init__(self)
+        mp.Process.__init__(self)
         # Other initializations for event flags
         self.params = params
         self.inData = inData
@@ -33,15 +32,21 @@ class parallelprocess(thd.Thread):
         self.Lglobal = np.array([])
         self.Lpeak = 0
         # Set filters
-        self.weightingfilter = pyslm.weighting(fs=self.params['fs'],
-                                         tau=self.params['tau'],
-                                         kind=self.params['fweighting'])
-        self.weightingPeak = pyslm.weighting(fs=self.params['fs'],
-                                         tau=self.params['tau'],
-                                         kind='C')
-        self.weightingSEL = pyslm.weighting(fs=self.params['fs'],
-                                         tau=self.params['tau'],
-                                         kind='A')
+        self.weightingfilter = pyslm.weighting(
+            fs=self.params['fs'],
+            tau=self.params['tau'],
+            kind=self.params['fweighting']
+            )
+        self.weightingPeak = pyslm.weighting(
+            fs=self.params['fs'],
+            tau=self.params['tau'],
+            kind='C'
+            )
+        self.weightingSEL = pyslm.weighting(
+            fs=self.params['fs'],
+            tau=self.params['tau'],
+            kind='A'
+            )
         # Other variables
         self.FC = float()
         self.idMax = None
@@ -74,21 +79,26 @@ class parallelprocess(thd.Thread):
             pass
     
 
-    def stand_by(self):
+    def stand_by(self) -> Callable:
         """
-        Description:
-        ------------
+        Description
+        -----------
         Function that receives the sound pressure measured by
         the microphone in Pascal and returns the level of global
         sound pressure and in frequency bands.
 
-        Processing steps:
-        -----------------
+        Processing steps
+        ----------------
             (1) Apply spectral correction if correction files exist
+            
             (2) Frequency weighting filter (A, C and Z)
+            
             (3) Filter in octave bands (1/1 or 1/3)
+            
             (5) Sound level by frequency bands
+            
             (4) Time weight filter (Impulse, Fast and Slow)
+            
             (6) Global sound level
 
         Parameters
@@ -147,19 +157,23 @@ class parallelprocess(thd.Thread):
             print("parallelprocess.run(): ", E, "\n")
         return
 
-    def stand_by_datalogger(self):
+
+    def stand_by_datalogger(self) -> Callable:
         """
-        Description:
-        ------------
+        Description
+        -----------
         Function that receives the sound pressure measured by
         the microphone in Pascal and returns the level of global
         sound pressure and in frequency bands.
 
-        Processing steps:
-        -----------------
+        Processing steps
+        ----------------
             (1) Apply spectral correction if correction files exist
+            
             (2) Frequency weighting filter (A, C and Z)
+            
             (3) Time weight filter (Impulse, Fast and Slow)
+            
             (4) Global sound level
 
         Parameters
@@ -208,21 +222,27 @@ class parallelprocess(thd.Thread):
             print("parallelprocess.run(): ", E, "\n")
         return
 
-    def datalogger (self):
+
+    def datalogger(self) -> Callable:
         """
-        Description:
-        ------------
+        Description
+        -----------
         Function that receives the sound pressure measured by
         the microphone in Pascal and returns the level of global
         sound pressure.
 
-        Processing steps:
-        -----------------
+        Processing steps
+        ----------------
             (1) Apply spectral correction if correction files exist
+            
             (2) Frequency weighting filter (A, C and Z)
+            
             (4) Time weight filter (Impulse, Fast and Slow)
+            
             (5) Global sound level
+            
             (6) Peak sound level
+            
             (7) Calculating equivalent continuous sound level
 
         Parameters
@@ -298,24 +318,30 @@ class parallelprocess(thd.Thread):
         return
 
 
-
-    def frequencyAnalyzer(self):
+    def frequencyAnalyzer(self) -> Callable:
         """
-        Description:
-        ------------
+        Description
+        -----------
         Function that receives the sound pressure measured by
         the microphone in Pascal and returns the level of global
         sound pressure and in frequency bands.
 
-        Processing steps:
-        -----------------
+        Processing steps
+        ----------------
             (1) Apply spectral correction if correction files exist
+            
             (2) Frequency weighting filter (A, C and Z)
+            
             (3) Filter in octave bands (1/1 or 1/3)
+            
             (4) Sound level by frequency bands
+            
             (5) Time weight filter (Impulse, Fast and Slow)
+            
             (6) Global sound level
+            
             (7) Peak sound level
+            
             (8) Calculating equivalent continuous sound level
 
         Parameters
@@ -411,21 +437,27 @@ class parallelprocess(thd.Thread):
             print("parallelprocess.run(): ", E, "\n")
         return
 
-    def reverberationTime(self):
+
+    def reverberationTime(self) -> Callable:
         """
-        Description:
-        ------------
-        Function that receives the sound pressure measured by
-        the microphone in Pascal and returns the level of global
+        Description
+        -----------
+        Function that receives the sound pressure measured by 
+        the microphone in Pascal and returns the level of global 
         sound pressure and in frequency bands.
 
-        Processing steps:
-        -----------------
+        Processing steps
+        ----------------
             (1) Apply spectral correction if correction files exist
+
             (2) Frequency weighting filter (A, C and Z)
+
             (3) Filter in octave bands (1/1 or 1/3)
+            
             (5) Sound level by frequency bands
+            
             (4) Time weight filter (Impulse, Fast and Slow)
+            
             (6) Global sound level
 
         Parameters
@@ -487,10 +519,11 @@ class parallelprocess(thd.Thread):
             print("parallelprocess.run(): ", E, "\n")
         return
 
-    def calibration(self):
+
+    def calibration(self) -> Callable:
         """
-        Description:
-        ------------
+        Description
+        -----------
         Function that performs the transformation of the Fourier, returning the vectors
         of complex amplitude and frequency to display on the calibration screen.
 
@@ -568,19 +601,41 @@ class parallelprocess(thd.Thread):
             print("parallelprocess.run(): ", E, "\n")
         return
 
-    def _set_band_filter(self):
+
+    def _set_band_filter(self) -> Callable:
+        """
+        Description
+        -----------
+        This function sets up the weighting filter in octave bands, 
+        and also a list with frequency labels
+
+        Returns
+        -------
+        Callable
+        """
         try:
             # OctaFilter frequency filter
-            self.bandfilter = pyslm.OctFilter(fstart=self.params['fstart'],
-                                        fend=self.params['fend'],
-                                        b=self.params['b'],
-                                        fs=self.params['fs'])
-
+            self.bandfilter = pyslm.OctFilter(
+                fstart=self.params['fstart'],
+                fend=self.params['fend'],
+                b=self.params['b'],
+                fs=self.params['fs']
+                )
             # Nominal frequencies used on the "x" axis of the plots
             self.bands = self.bandfilter.fnom
             self.x_axis = np.asarray(range(self.bands.size), dtype=np.int32)
-            freq = {31.5: '31.5', 63. :'63', 125.: '125', 250.: '250', 500.: '500',
-                   1000.: '1k', 2000.: '2k', 4000.: '4k', 8000.: '8k', 16000.: '16k'}
+            freq = {
+                31.5: '31.5',
+                63. :'63',
+                125.: '125',
+                250.: '250',
+                500.: '500',
+                1000.: '1k',
+                2000.: '2k',
+                4000.: '4k',
+                8000.: '8k',
+                16000.: '16k'
+                }
             self.strBands = list()
             for i in range(self.bands.size):
                 if self.bands[i] in freq.keys():
@@ -589,24 +644,44 @@ class parallelprocess(thd.Thread):
                     self.strBands.append((i, ''))
         except Exception as E:
             print("parallelprocess._set_band_filter(): ", E, "\n")
+        return
 
-    def _apply_correction(self, signal: np.ndarray, domain: str = 'time'):
+
+    def _apply_correction(self, signal: np.ndarray, domain: str = 'time') -> np.ndarray:
+        """
+        Description
+        -----------
+        Function that applies spectral correction to the audio signal, removing the spectral
+        'coloring' of the microphone and/or the analog to digital converter.
+
+        Parameters
+        ----------
+        signal : np.ndarray
+            Audio time series in which spectrum correction will be applied
+        domain : str
+            Signal domain ('time' or 'freq')
+
+        Returns
+        -------
+        correctedSignal : numpy.ndarray
+            Audio signal with correction applied
+        """
         try:
             with np.errstate(divide='ignore'):
                 freqSignal = np.fft.rfft(signal, axis=0, norm=None)
                 MagfreqSignal = 20 * \
                     np.log10(np.abs(freqSignal))
                 correctedMagfreqSignal = MagfreqSignal
-                # Carregando dados do microfone
+                # Loading data from microphone
                 if self.params['micCorr'] is not None and self.params['applyMicCorr']:
-                    # Aplica correcao na magnitude
+                    # Apply magnitude correction
                     correctedMagfreqSignal -= self.params['micCorr']
 
                 # Carregando dados do ADC
                 if self.params['adcCorr'] is not None and self.params['applyAdcCorr']:
-                    # Aplica correcao na magnitude
+                    # Apply magnitude correction
                     correctedMagfreqSignal -= self.params['adcCorr']
-                # Retorna ao vetor de amplitude complexa com magnitude e fase
+                # Return to complex amplitude vector with magnitude and phase
                 correctedfreqSignal = 10**(correctedMagfreqSignal /
                                         20)
                 r = correctedfreqSignal
@@ -614,15 +689,17 @@ class parallelprocess(thd.Thread):
                 correctedfreqSignal = r*(np.cos(teta) + np.sin(teta)*1j)
 
                 if domain.lower() == 'time':
-                    # Transforma em SignalObj para obter o sinal no tempo (ifft)
-                    correctedSignal = np.fft.irfft(a=correctedfreqSignal)# * self.window
+                    # Get the inverse Fourier transform (ifft)
+                    correctedSignal = np.fft.irfft(a=correctedfreqSignal)
                 elif domain.lower() == 'freq':
                     correctedSignal = correctedfreqSignal
                 else:
-                    AttributeError("Unsupported domain, please try domain = 'freq'" +
-                                " if the `signal` parameter is the signal power spectrum," +
-                                " or try domain = 'time' if the` signal` parameter is the signal" +
-                                " measured in the time domain.")
+                    AttributeError(
+                        "Unsupported domain, please try domain = 'freq'" +
+                        " if the `signal` parameter is the signal power spectrum," +
+                        " or try domain = 'time' if the` signal` parameter is the signal" +
+                        " measured in the time domain."
+                        )
         except Exception as E:
             print("parallelprocess._apply_correction(): ", E, "\n")
         return correctedSignal
@@ -642,10 +719,14 @@ class finalprocessing(object):
         elif self.params['template'] == 'calibration':
             self.results = self.calibration()
         else:
-            AttributeError("Template %s not supported, please try 'frequencyAnalyzer', " +
-                           "'reverberationTime' or 'calibration'." % self.params['template'])
+            AttributeError(
+                "Template %s not supported, please try 'frequencyAnalyzer', " +\
+                "'reverberationTime' or 'calibration'." % self.params['template']
+                )
+        return
 
-    def statisticallevels(self):
+
+    def statisticallevels(self) -> dict:
         """
         Description:
         ------------
@@ -676,7 +757,8 @@ class finalprocessing(object):
             print("finalprocessing.StatisticalLevels(): ", E, "\n")
         return StatisticalLevels
 
-    def reverberationTime(self):
+
+    def reverberationTime(self) -> dict:
         try:
             # Load the impulse response into a vector of type numpy.ndarray
             IR = self.inData
@@ -713,7 +795,8 @@ class finalprocessing(object):
             print("finalprocessing.reverberationTime(): ", E, "\n")
         return roomsParams.results
 
-    def calibration(self):
+
+    def calibration(self) -> dict:
         """
         Description:
         ------------
@@ -727,10 +810,8 @@ class finalprocessing(object):
 
         Returns
         -------
-        freqSignal : np.ndarray
-            Complex amplitude vector [Pa]
-        freqVector : np.ndarray
-            Frequency vector [Hz]
+        results : dict
+            Dictionary containing results of the calibration procedure
         """
         try:
             signal = self.inData
@@ -773,65 +854,117 @@ class finalprocessing(object):
         return results
 
 
-def ImpulseResponse(signal: np.ndarray, fs: int, excitTime: int, numDecay: int, scapeTime: int, method: str, excitation: {None, np.ndarray} = None):
-    if numDecay > 1:
-        if signal.shape[-1] > signal.shape[0]:
-            signal = signal.transpose()
+def ImpulseResponse(signal: np.ndarray, fs: int, excitTime: int,
+    numDecay: int, scapeTime: int, method: str, excitation: Union[None, np.ndarray] = None) -> np.ndarray:
+    """
+    Description
+    -----------
+    asdfgh
+
+    Parameters
+    ----------
+    signal : numpy.ndarray
+    fs : int
+    excitTime : int
+    numDecay : int
+    scapeTime : int
+    method : str
+    excitation : None | numpy.array
+
+    Returns
+    -------
+    impulseResponse : numpy.ndarray
+
+    """
+    try:
+        if numDecay > 1:
+            if signal.shape[-1] > signal.shape[0]:
+                signal = signal.transpose()
+            else:
+                pass
+            signal = np.mean(a=signal, axis=1)
         else:
-            pass
-        signal = np.mean(a=signal, axis=1)
-    else:
-        signal = signal[:,0]
-    if method in ['pinkNoise', 'whiteNoise']:
-        time = np.arange(0, signal.size/fs, 1/fs)
-        cutPoint = np.where(time >= scapeTime + excitTime)[0][0]
-        signal = signal[cutPoint:]
-        square = signal**2
-        maxPoint = np.where(square == square.max())[0][0]
-        impulseResponse = signal[maxPoint:]
-    else:
-        if signal.size > excitation.size:
-            size = signal.size - excitation.size
-            zeros = np.zeros(shape=(size))
-            excitation = np.concatenate((excitation, zeros), axis=0)
-        elif excitation.size > signal.size:
-            size = excitation.size - signal.size
-            zeros = np.zeros(shape=(size))
-            excitation = np.concatenate((signal, zeros), axis=0)
+            signal = signal[:,0]
+        if method in ['pinkNoise', 'whiteNoise']:
+            time = np.arange(0, signal.size/fs, 1/fs)
+            cutPoint = np.where(time >= scapeTime + excitTime)[0][0]
+            signal = signal[cutPoint:]
+            square = signal**2
+            maxPoint = np.where(square == square.max())[0][0]
+            impulseResponse = signal[maxPoint:]
         else:
-            pass
-        time = np.arange(0, signal.size/fs, 1/fs)
-        cutPoint = np.where(time >= scapeTime)[0][0]
-        signal = signal[cutPoint:]
-        excitation = excitation[cutPoint:]
-        freqSignal = np.fft.rfft(signal, axis=0, norm=None)
-        freqExcitation = np.fft.rfft(excitation, axis=0, norm=None)
-        freqIR = freqSignal/freqExcitation
-        impulseResponse = np.fft.irfft(a=freqIR)
-        square = impulseResponse**2
-        maxPoint = np.where(square == square.max())[0][0]
-        impulseResponse = impulseResponse[maxPoint:]
-    # print('Shape is: ', signal.shape)
+            if signal.size > excitation.size:
+                size = signal.size - excitation.size
+                zeros = np.zeros(shape=(size))
+                excitation = np.concatenate((excitation, zeros), axis=0)
+            elif excitation.size > signal.size:
+                size = excitation.size - signal.size
+                zeros = np.zeros(shape=(size))
+                excitation = np.concatenate((signal, zeros), axis=0)
+            else:
+                pass
+            time = np.arange(0, signal.size/fs, 1/fs)
+            cutPoint = np.where(time >= scapeTime)[0][0]
+            signal = signal[cutPoint:]
+            excitation = excitation[cutPoint:]
+            freqSignal = np.fft.rfft(signal, axis=0, norm=None)
+            freqExcitation = np.fft.rfft(excitation, axis=0, norm=None)
+            freqIR = freqSignal/freqExcitation
+            impulseResponse = np.fft.irfft(a=freqIR)
+            square = impulseResponse**2
+            maxPoint = np.where(square == square.max())[0][0]
+            impulseResponse = impulseResponse[maxPoint:]
+    except Exception as E:
+        print("ImpulseResponse(): ", E, "\n")
     return impulseResponse
 
-def rms(a, axis):
-    """
-    Function that calculates the root mean square of the sound pressure.
 
-    Args:
-        a : np.ndarray
+def rms(a: np.ndarray, axis: int) -> np.ndarray:
+    """
+    Description
+    -----------
+    Function that calculates the root mean square of the sound pressure
+
+    Parameters
+    ----------
+    a : np.ndarray
         Quadratic sound pressure (e.g. pressure**2)
-        axis : int
+    axis : int
         Vector calculation axis
 
-    Returns:
-        np.ndarray or int
-        
+    Returns
+    -------
+    root_mean_square : np.ndarray
+        root mean square of the sound pressure
     """
-    return np.sqrt(np.mean(a=a, axis=axis))
+    try:
+        root_mean_square = np.sqrt(np.mean(a=a, axis=axis))
+    except Exception as E:
+        print("rms(): ", E, "\n")
+    return root_mean_square
 
-def apply_correction(signal: np.ndarray, fs: int, micCorr: {None, np.ndarray},
-                     adcCorr: {None, np.ndarray}, applyMicCorr: bool, applyAdcCorr: bool):
+
+def apply_correction(signal: np.ndarray, fs: int, micCorr: Union[None, np.ndarray],
+                     adcCorr: Union[None, np.ndarray], applyMicCorr: bool, applyAdcCorr: bool) -> np.ndarray:
+    """
+    Description
+    -----------
+    asdfghj
+
+    Parameters
+    ----------
+    signal : numpy.ndarray
+    fs : int
+    micCorr : None | numpy.ndarray
+    adcCorr : None | numpy.ndarray
+    applyMicCorr : bool
+    applyAdcCorr : bool
+
+    Returns
+    -------
+    correctedSignal : numpy.ndarray
+
+    """
     try:
         refPressure = 2e-05
         freqSignal = np.fft.rfft(signal, axis=0, norm=None)

@@ -4,50 +4,69 @@ Created on Fri Jul 24 16:52:22 2020
 
 @author: leonardojacomussi
 """
+from typing import Union, Callable, Type
 from scipy import interpolate as interp
 import multiprocessing as mp
-from time import sleep, time
-from PyQt5 import QtCore
 import sounddevice as sd
+from PyQt5 import QtCore
 import threading as thd
 import numpy as np
-import h5py
-import os
 import pyslm
+import time
+import os
 
 default_params = pyslm.parameters.load()
 
 class StreamManager(QtCore.QObject):
+    """
+    Description
+    -----------
+    asdfgbnm,
+
+    Main parameters
+    ---------------
+    asdfghjm,.
+
+    Methods
+    -------
+    asdfvgbnm
+    """
     realtime_data = QtCore.pyqtSignal(dict)
     fullresults_data = QtCore.pyqtSignal(dict)
     callstop = QtCore.pyqtSignal()
-    def __init__(self, version: str = default_params['version'],
-                 path: str = os.path.join(default_params['pathProject'], default_params['currentProject']),
-                 device: list = default_params['device'],
-                 fs: int = default_params['fs'],
-                 inCh: list = default_params['inCh'],
-                 outCh: list = default_params['outCh'],
-                 tau: float = default_params['tau'],
-                 fstart: float = default_params['fstart'],
-                 fend: float = default_params['fend'],
-                 b: int = default_params['b'],
-                 fweighting: str = default_params['fweighting'],
-                 duration: int = default_params['duration'],
-                 excitTime: int = default_params['excitTime'],
-                 scapeTime: int = default_params['scapeTime'],
-                 decayTime: int = default_params['decayTime'],
-                 TLevel: int = default_params['TLevel'],
-                 template: str = default_params['template'],
-                 method: str = default_params['method'],
-                 numDecay: int = default_params['numDecay'],
-                 fCalib: float = default_params['fCalib'],
-                 pCalib: float = default_params['pCalib'],
-                 calibFactor: float = default_params['calibFactor'],
-                 micCorr: {np.ndarray, None} = default_params['micCorr'],
-                 applyMicCorr: bool = default_params['applyMicCorr'],
-                 adcCorr: {np.ndarray, None} = default_params['adcCorr'],
-                 applyAdcCorr: bool = default_params['applyAdcCorr'],
-                 saveRawData: bool = default_params['saveRawData']):
+
+    def __init__(self,
+        version: str = default_params['version'],
+        path: str = os.path.join(
+            default_params['pathProject'],
+            default_params['currentProject']
+            ),
+        device: list = default_params['device'],
+        fs: int = default_params['fs'],
+        inCh: list = default_params['inCh'],
+        outCh: list = default_params['outCh'],
+        tau: float = default_params['tau'],
+        fstart: float = default_params['fstart'],
+        fend: float = default_params['fend'],
+        b: int = default_params['b'],
+        fweighting: str = default_params['fweighting'],
+        duration: int = default_params['duration'],
+        excitTime: int = default_params['excitTime'],
+        scapeTime: int = default_params['scapeTime'],
+        decayTime: int = default_params['decayTime'],
+        TLevel: int = default_params['TLevel'],
+        template: str = default_params['template'],
+        method: str = default_params['method'],
+        numDecay: int = default_params['numDecay'],
+        fCalib: float = default_params['fCalib'],
+        pCalib: float = default_params['pCalib'],
+        calibFactor: float = default_params['calibFactor'],
+        micCorr: Union[np.ndarray, None] = default_params['micCorr'],
+        applyMicCorr: bool = default_params['applyMicCorr'],
+        adcCorr: Union[np.ndarray, None] = default_params['adcCorr'],
+        applyAdcCorr: bool = default_params['applyAdcCorr'],
+        saveRawData: bool = default_params['saveRawData']
+        ):
         super(StreamManager, self).__init__(None)
         ######## __init__ variables ########
         self.version = version
@@ -84,7 +103,8 @@ class StreamManager(QtCore.QObject):
         self._set_parameters()
         return
 
-    def play(self):
+
+    def play(self) -> Callable:
         try:
             if self.template in ['spl', 'frequencyAnalyzer', 'calibration']:
                 self.Record()
@@ -101,7 +121,8 @@ class StreamManager(QtCore.QObject):
             print("StreamManager.play(): ", E, "\n")
         return
 
-    def pause(self):
+
+    def pause(self) -> Callable:
         try:
             if self.isPaused.is_set():
                 self.isPaused.clear()
@@ -111,7 +132,8 @@ class StreamManager(QtCore.QObject):
             print("StreamManager.pause(): ", E, "\n")
         return
 
-    def stop(self):
+
+    def stop(self) -> Callable:
         try:
             if self.template in ['spl', 'frequencyAnalyzer', 'reverberationTime']:
                 self.callstop.emit()
@@ -129,7 +151,7 @@ class StreamManager(QtCore.QObject):
             while(self.gettingResults.is_alive() and\
                   self.parallelProcess.is_alive() and\
                   self.threadStream.is_alive()):
-                sleep(.1)
+                time.sleep(.1)
             # Threads stream
             try:
                 self.threadStream.join()
@@ -161,7 +183,8 @@ class StreamManager(QtCore.QObject):
             print("StreamManager.stop(): ", E, "\n")
         return
 
-    def stand_by(self):
+
+    def stand_by(self) -> Callable:
         try:
             self._setstream(streamType=sd.InputStream,
                         callback=self._standby_callback)
@@ -169,32 +192,41 @@ class StreamManager(QtCore.QObject):
             print("StreamManager.stand_by(): ", E, "\n")
         return
 
-    def Record(self):
+
+    def Record(self) -> Callable:
         try:
             self._setstream(streamType=sd.InputStream, callback=self._input_callback)
         except Exception as E:
             print("StreamManager.Record(): ", E, "\n")
         return
 
-    def PlayRecord(self):
+
+    def PlayRecord(self) -> Callable:
         try:
             self._setstream(streamType=sd.Stream, callback=self._stream_callback)
         except Exception as E:
             print("StreamManager.PlayRecord(): ", E, "\n")
         return
 
-    def _setstream(self, streamType, callback):
+
+    def _setstream(self, streamType: Type, callback: Callable) -> Callable:
         try:
-            self.stream = streamType(samplerate=self.fs,
-                                     blocksize=self.frameSize,
-                                     device=self.device,
-                                     channels=self.numChannels[0],
-                                     dtype='float32',
-                                     callback=callback)
+            self.stream = streamType(
+                samplerate = self.fs,
+                blocksize = self.frameSize,
+                device = self.device,
+                channels = self.numChannels[0],
+                dtype = 'float32',
+                callback = callback
+                )
             self.isPaused.clear()
             self.isStopped.clear()
             self.isPlayed.set()
-            self.parallelProcess = pyslm.parallelprocess(self.inData, self.isPlayed, self.params)
+            self.parallelProcess = pyslm.parallelprocess(
+                inData = self.inData,
+                isPlayed = self.isPlayed,
+                params = self.params
+                )
             self.parallelProcess.start()
             self.gettingResults = thd.Thread(target=self.realtime)
             self.gettingResults.start()
@@ -205,7 +237,8 @@ class StreamManager(QtCore.QObject):
             print("StreamManager._setstream(): ", E, "\n")
         return
 
-    def runner(self):
+
+    def runner(self) -> Callable:
         try:
             with self.stream:
                 self.isStopped.wait()
@@ -213,7 +246,8 @@ class StreamManager(QtCore.QObject):
             print("StreamManager.runner(): ", E, "\n")
         return
 
-    def _set_parameters(self):
+
+    def _set_parameters(self) -> Callable:
         try:
             # Events
             self.isPlayed = mp.Event()
@@ -251,31 +285,33 @@ class StreamManager(QtCore.QObject):
             self.framesRead = 0
             self.countDn = self.numSamples
             self.counters = mp.Queue(self.numSamples//2)
-            self.params = {'version':   self.version,
-                           'device':       self.device,
-                           'fs':           self.fs,
-                           'inCh':         self.inCh,
-                           'outCh':        self.outCh,
-                           'tau':          self.tau,
-                           'fstart':       self.fstart,
-                           'fend':         self.fend,
-                           'b':            self.b,
-                           'fweighting':   self.fweighting,
-                           'duration':     self.duration,
-                           'excitTime':    self.excitTime,
-                           'scapeTime':    self.scapeTime,
-                           'decayTime':    self.decayTime,
-                           'template':     self.template,
-                           'method':       self.method,
-                           'numDecay':     self.numDecay,
-                           'fCalib':       self.fCalib,
-                           'pCalib':       self.pCalib,
-                           'numChannels':  self.numChannels,
-                           'numSamples':   self.numSamples,
-                           'frameSize':    self.frameSize,
-                           'applyMicCorr': self.applyMicCorr,
-                           'applyAdcCorr': self.applyAdcCorr,
-                           'calibFactor':  self.calibFactor}
+            self.params = {
+                'version': self.version,
+                'device': self.device,
+                'fs': self.fs,
+                'inCh': self.inCh,
+                'outCh': self.outCh,
+                'tau': self.tau,
+                'fstart': self.fstart,
+                'fend': self.fend,
+                'b': self.b,
+                'fweighting': self.fweighting,
+                'duration': self.duration,
+                'excitTime': self.excitTime,
+                'scapeTime': self.scapeTime,
+                'decayTime': self.decayTime,
+                'template': self.template,
+                'method': self.method,
+                'numDecay': self.numDecay,
+                'fCalib': self.fCalib,
+                'pCalib': self.pCalib,
+                'numChannels': self.numChannels,
+                'numSamples': self.numSamples,
+                'frameSize': self.frameSize,
+                'applyMicCorr': self.applyMicCorr,
+                'applyAdcCorr': self.applyAdcCorr,
+                'calibFactor': self.calibFactor
+                }
 
             if self.applyMicCorr:
                 if type(self.micCorr) == np.ndarray:
@@ -326,7 +362,8 @@ class StreamManager(QtCore.QObject):
             print("StreamManager._set_parameters(): ", E, "\n")
         return
 
-    def _set_excitation(self):
+
+    def _set_excitation(self) -> Callable:
         try:
             if self.method == 'sweepExponential':
                 excitation = pyslm.sweep(fstart=self.fstart,
@@ -358,8 +395,9 @@ class StreamManager(QtCore.QObject):
             print("StreamManager._set_excitation(): ", E, "\n")
         return
 
+
     def _standby_callback(self, indata: np.ndarray, frames: int,
-                          times: type, status: sd.CallbackFlags):
+                          times: type, status: sd.CallbackFlags) -> Callable:
         try:
             if self.isStopped.is_set():
                 self.stop()
@@ -372,8 +410,9 @@ class StreamManager(QtCore.QObject):
             print("StreamManager._standby_callback(): ", E, "\n")
         return
 
+
     def _input_callback(self, indata: np.ndarray, frames: int,
-                        times: type, status: sd.CallbackFlags):
+                        times: type, status: sd.CallbackFlags) -> Callable:
         try:
             # Verificando se a stream está em stand-by
             if self.isPaused.is_set():
@@ -398,8 +437,9 @@ class StreamManager(QtCore.QObject):
             print("StreamManager._input_callback(): ", E, "\n")
         return
 
+
     def _stream_callback(self, indata: np.ndarray, outdata: np.ndarray,
-                         frames: int, times: type, status: sd.CallbackFlags):
+                        frames: int, times: type, status: sd.CallbackFlags) -> Callable:
         try:
             # Verificando se a stream está em stand-by
             if self.isPaused.is_set():
@@ -435,7 +475,8 @@ class StreamManager(QtCore.QObject):
             print("StreamManager._stream_callback(): ", E, "\n")
         return
 
-    def realtime(self):
+
+    def realtime(self)  -> Callable:
         try:
             while not self.isPlayed.is_set():
                 continue
@@ -502,11 +543,18 @@ class StreamManager(QtCore.QObject):
                 pass
         except Exception as E:
             print("StreamManager.realtime(): ", E, "\n")
+        return
 
-    def fullresults(self):
+
+    def fullresults(self) -> Callable:
         try:
             if self.template == 'spl':
-                process = pyslm.finalprocessing(inData=self.Lglobal, params=self.params, bandfilter=None, weightingfilter=None)
+                process = pyslm.finalprocessing(
+                    inData = self.Lglobal,
+                    params = self.params,
+                    bandfilter = None,
+                    weightingfilter = None
+                    )
                 process.results['Leq_global'] = self.Leq_global
                 process.results['Lpeak'] = self.Lpeak
                 process.results['Lglobal'] = self.Lglobal
@@ -517,7 +565,12 @@ class StreamManager(QtCore.QObject):
                 process.results['framesRead'] = self.framesRead
                 self.fullresults_data.emit(process.results)
             elif self.template == 'frequencyAnalyzer':
-                process = pyslm.finalprocessing(inData=self.Lglobal, params=self.params, bandfilter=None, weightingfilter=None)
+                process = pyslm.finalprocessing(
+                    inData = self.Lglobal,
+                    params = self.params,
+                    bandfilter = None,
+                    weightingfilter = None
+                    )
                 process.results['Leq_bands'] = self.Leq_bands
                 process.results['L_max_bands'] = self.L_max_bands
                 process.results['L_min_bands'] = self.L_min_bands
@@ -531,17 +584,29 @@ class StreamManager(QtCore.QObject):
                 process.results['framesRead'] = self.framesRead
                 self.fullresults_data.emit(process.results)
             elif self.template == 'reverberationTime':
-                self.IR = pyslm.ImpulseResponse(signal=self.send_to_disk, excitTime = self.excitTime, fs=self.fs, numDecay=self.numDecay, 
-                                                scapeTime=self.scapeTime, method=self.method, excitation=self.excitation)
+                self.IR = pyslm.ImpulseResponse(
+                    signal = self.send_to_disk,
+                    excitTime = self.excitTime,
+                    fs = self.fs,
+                    numDecay = self.numDecay, 
+                    scapeTime = self.scapeTime,
+                    method = self.method,
+                    excitation = self.excitation
+                    )
                 if self.saveRawData:
-                    self.recorderRawData = pyslm.storage(buffer_size=int(self.fs*30),
-                                                        shape=(self.IR.size, 1),
-                                                        path=self.path, kind='TR')
+                    self.recorderRawData = pyslm.storage(
+                        buffer_size = int(self.fs*30),
+                        shape = (self.IR.size, 1),
+                        path = self.path, kind='TR'
+                        )
                     self.recorderRawData.add(self.IR.reshape(self.IR.size, 1))
                     self.recorderRawData.close()
-                process = pyslm.finalprocessing(inData=self.IR, params=self.params,
-                                          bandfilter=self.parallelProcess.bandfilter,
-                                          weightingfilter=self.parallelProcess.weightingfilter)
+                process = pyslm.finalprocessing(
+                    inData = self.IR,
+                    params = self.params,
+                    bandfilter = self.parallelProcess.bandfilter,
+                    weightingfilter = self.parallelProcess.weightingfilter
+                    )
                 process.results['bands'] = self.parallelProcess.bands
                 self.fullresults_data.emit(process.results)
                 self.RT20 = process.results['RT20']
@@ -554,40 +619,42 @@ class StreamManager(QtCore.QObject):
             print("StreamManager.fullresults(): ", E, "\n")
         return
 
-# %% Apenas para testes
+
 if __name__ == '__main__':
     micData = np.loadtxt(fname='Files\\microphoneFRF.txt')
     adcData = np.loadtxt(fname='Files\\adcFRF.txt')
-    demo = StreamManager(version= 'AdvFreqAnalyzer',
-                        path = None,
-                        device=[1, 3],
-                        fs=44100,
-                        inCh=[1],
-                        outCh=[1, 2],
-                        tau=0.125,
-                        fstart=63.0,
-                        fend=8000.0,
-                        b=1,
-                        fweighting='Z',
-                        duration=180,
-                        excitTime=5,
-                        scapeTime=2,
-                        decayTime=5,
-                        # 'calibration', 'stand-by', 'reverberationTime', 'frequencyAnalyzer', 'spl'
-                        template='frequencyAnalyzer',
-                        method='pinkNoise',  # 'pinkNoise', 'whiteNoise', 'sweepExponential', 'impulse'
-                        numDecay=2,
-                        TLevel = 76,
-                        fCalib=1000.0,
-                        pCalib=94.0,
-                        calibFactor = 1.0,
-                        micCorr=None,
-                        applyMicCorr=False,
-                        adcCorr=None,
-                        applyAdcCorr=False,
-                        saveRawData=True)
+    demo = StreamManager(
+        version = 'AdvFreqAnalyzer',
+        path = None,
+        device = [1, 3],
+        fs = 44100,
+        inCh = [1],
+        outCh = [1, 2],
+        tau = 0.125,
+        fstart = 63.0,
+        fend = 8000.0,
+        b = 1,
+        fweighting = 'Z',
+        duration = 180,
+        excitTime = 5,
+        scapeTime = 2,
+        decayTime = 5,
+        # 'calibration', 'stand-by', 'reverberationTime', 'frequencyAnalyzer', 'spl'
+        template = 'frequencyAnalyzer',
+        method = 'pinkNoise',  # 'pinkNoise', 'whiteNoise', 'sweepExponential', 'impulse'
+        numDecay = 2,
+        TLevel  =  76,
+        fCalib = 1000.0,
+        pCalib = 94.0,
+        calibFactor  =  1.0,
+        micCorr = None,
+        applyMicCorr = False,
+        adcCorr = None,
+        applyAdcCorr = False,
+        saveRawData = True
+        )
     demo.play()
-    sleep(.5)
+    time.sleep(.5)
     while not demo.isStopped.is_set():
         continue
     while demo.parallelProcess.results.empty():

@@ -4,3 +4,8 @@ PySLM.egg-info/
 build/
 dist/
 __pycache__/
+/Lib
+/Scripts
+/pyvenv.cfg
+/Include
+/.vscode

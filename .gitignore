@@ -9,3 +9,4 @@ __pycache__/
 /pyvenv.cfg
 /Include
 /.vscode
+/Lib
